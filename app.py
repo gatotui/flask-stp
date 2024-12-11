@@ -51,6 +51,16 @@ class Uso(db.Model):
     def __repr__(self):
         return f'<Uso {self.id} - Usuario {self.usuario.nombre}>'
     
+@app.route("/cancel", methods=["POST"])
+def cancel():
+    # Realiza cualquier lógica de cancelación aquí si es necesario
+    return redirect(url_for('perfil'))  # Redirige a la página de perfil
+
+
+@app.route("/add_time")
+def add_time():
+    return render_template("add_time.html")
+    
 @app.route("/registro")
 def registro():
     return render_template("registro.html")
