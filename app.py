@@ -64,14 +64,10 @@ def save_data():
     print(f"resumen recibido: {summary}")
     
     usuario_id = session.get("usuario_id")
-    
-    try:
-        fecha_inicio = datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
-        fecha_fin = datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
-    except ValueError as e:
-        print(f'Error en la conversion de fechas: {e}')
-        return jsonify({'status':'error', 'message':'Formato de fecha inválido'}), 400
-    
+
+    fecha_inicio = datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+    fecha_fin = datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+
     resumen_serializado = json.dumps(summary)
     
     estudio = Estudio(
@@ -80,14 +76,19 @@ def save_data():
         fecha_fin=fecha_fin,
         resumen=resumen_serializado
     )
-
-    tiempo = Tiempo(
-        usuario_id=usuario_id,
-        tiempo=time  
-    )
-
     db.session.add(estudio)
-    db.session.add(tiempo)
+    
+    tiempo = Tiempo.query.filter_by(usuario_id=usuario_id).first()
+    
+    if tiempo:
+            tiempo.tiempo += time
+    else:
+        tiempo = Tiempo(
+            usuario_id=usuario_id,
+            tiempo=time
+        )
+        db.session.add(tiempo)
+
     db.session.commit()
     
     return jsonify({
