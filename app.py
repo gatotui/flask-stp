@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 from datetime import datetime
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '123'
@@ -35,7 +36,7 @@ class Estudio(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
     fecha_inicio = db.Column(db.DateTime, nullable=False)
     fecha_fin = db.Column(db.DateTime, nullable=False)
-    resumen = db.Column(db.String, nullable=False)
+    resumen = db.Column(db.Text, nullable=False)
     usuario = db.relationship('Usuario', backref=db.backref('estudios', lazy=True))
     
     def __repr__(self):
@@ -54,10 +55,40 @@ class Uso(db.Model):
 @app.route("/save_data", methods=["POST"])
 def save_data():
     data = request.get_json()
+    
     start = data.get('start')
     end = data.get('end')
     summary = data.get('summary')
     time = data.get('time')
+    
+    print(f"resumen recibido: {summary}")
+    
+    usuario_id = session.get("usuario_id")
+    
+    try:
+        fecha_inicio = datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+        fecha_fin = datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+    except ValueError as e:
+        print(f'Error en la conversion de fechas: {e}')
+        return jsonify({'status':'error', 'message':'Formato de fecha inválido'}), 400
+    
+    resumen_serializado = json.dumps(summary)
+    
+    estudio = Estudio(
+        usuario_id=usuario_id,
+        fecha_inicio=fecha_inicio,
+        fecha_fin=fecha_fin,
+        resumen=resumen_serializado
+    )
+
+    tiempo = Tiempo(
+        usuario_id=usuario_id,
+        tiempo=time  
+    )
+
+    db.session.add(estudio)
+    db.session.add(tiempo)
+    db.session.commit()
     
     return jsonify({
         'status': 'success',

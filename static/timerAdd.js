@@ -61,7 +61,7 @@ function stop() {
   stopBtn.classList.remove("stopActive")
   clearInterval(startTimer)
 
-  const summaryText = document.querySelector("#summary").value
+  const summary = document.querySelector("#summary").value
 
   timeElapsedInMs =
     parseInt(hr) * 3600000 +
@@ -70,7 +70,7 @@ function stop() {
     parseInt(ms) / 100
 
   console.log("Tiempo transcurrido en milisegundos:", timeElapsedInMs)
-  console.log("Resumen:", summaryText)
+  console.log("Resumen:", summary)
 
   sendData(date_inicio, date_fin, summary, timeElapsedInMs)
 }
