@@ -51,10 +51,25 @@ class Uso(db.Model):
     def __repr__(self):
         return f'<Uso {self.id} - Usuario {self.usuario.nombre}>'
     
-@app.route("/cancel", methods=["POST"])
+@app.route("/save_data", methods=["POST"])
+def save_data():
+    data = request.get_json()
+    start = data.get('start')
+    end = data.get('end')
+    summary = data.get('summary')
+    time = data.get('time')
+    
+    return jsonify({
+        'status': 'success',
+        'start': start,
+        'end': end,
+        'summary':summary,
+        'time':time
+        }), 200
+
+@app.route("/cancel", methods=["GET"])
 def cancel():
-    # Realiza cualquier lógica de cancelación aquí si es necesario
-    return redirect(url_for('perfil'))  # Redirige a la página de perfil
+    return redirect(url_for('perfil'))
 
 
 @app.route("/add_time")
