@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 from datetime import datetime
 import json
+from sqlalchemy import desc
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '123'
@@ -68,13 +69,11 @@ def save_data():
     fecha_inicio = datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
     fecha_fin = datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
 
-    resumen_serializado = json.dumps(summary)
-    
     estudio = Estudio(
         usuario_id=usuario_id,
         fecha_inicio=fecha_inicio,
         fecha_fin=fecha_fin,
-        resumen=resumen_serializado
+        resumen=summary
     )
     db.session.add(estudio)
     
@@ -91,13 +90,16 @@ def save_data():
 
     db.session.commit()
     
-    return jsonify({
-        'status': 'success',
-        'start': start,
-        'end': end,
-        'summary':summary,
-        'time':time
-        }), 200
+    return jsonify({'redirect': url_for('perfil')})
+    
+    # return jsonify({
+    #     'status': 'success',
+    #     'start': start,
+    #     'end': end,
+    #     'summary': summary,
+    #     'time': time
+    #     }), 200
+    
 
 @app.route("/cancel", methods=["GET"])
 def cancel():
@@ -161,8 +163,10 @@ def perfil():
     
     usuario_id = session["usuario_id"]
     usuario_nombre = session["usuario_nombre"]
-  
-    return render_template("perfil.html", id=usuario_id, nombre=usuario_nombre)
+    
+    estudios = Estudio.query.filter_by(usuario_id=usuario_id).order_by(desc(Estudio.id)).all()
+      
+    return render_template("perfil.html", id=usuario_id, nombre=usuario_nombre, estudios=estudios)
 
 @app.route("/logout")
 def logout():

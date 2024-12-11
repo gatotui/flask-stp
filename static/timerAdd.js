@@ -27,9 +27,11 @@ function start() {
   date_inicio = getDate()
   console.log(date_inicio)
 
+  startBtn.disabled = true
+
   startBtn.classList.add("active")
   stopBtn.classList.remove("stopActive")
-
+  
   startTimer = setInterval(() => {
     ms++
     ms = ms < 10 ? "0" + ms : ms
@@ -55,7 +57,7 @@ function start() {
 
 function stop() {
   date_fin = getDate()
-  console.log(date_fin)
+  // console.log(date_fin)
 
   startBtn.classList.remove("active")
   stopBtn.classList.remove("stopActive")
@@ -67,10 +69,10 @@ function stop() {
     parseInt(hr) * 3600000 +
     parseInt(min) * 60000 +
     parseInt(sec) * 1000 +
-    parseInt(ms) / 100
+    parseInt(ms)
 
-  console.log("Tiempo transcurrido en milisegundos:", timeElapsedInMs)
-  console.log("Resumen:", summary)
+  // console.log("Tiempo transcurrido en milisegundos:", timeElapsedInMs)
+  // console.log("Resumen:", summary)
 
   sendData(date_inicio, date_fin, summary, timeElapsedInMs)
 }
@@ -82,18 +84,23 @@ function putValue() {
 }
 
 function sendData(date_inicio, date_fin, summary, time) {
-  fetch('/save_data', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ 
-        start: date_inicio,
-        end: date_fin,
-        summary: summary,
-        time: time })
+  fetch("/save_data", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      start: date_inicio,
+      end: date_fin,
+      summary: summary,
+      time: time,
+    }),
   })
-  .then(response => response.json())
-  .then(data => console.log('Datos guardados en el servidor:', data))
-  .catch(error => console.error('Error al guardar los datos:', error));
+    .then((response) => response.json())
+    .then(data => {
+      if (data.redirect) {
+        window.location.href = data.redirect; 
+      }
+    })
+    .catch((error) => console.error("Error al guardar los datos:", error))
 }

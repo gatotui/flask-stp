@@ -1,14 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Perfil</title>
-</head>
-<body>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+    </style>
+  </head>
+  <body>
     <h1>Bienvenido, {{ nombre }}!</h1>
     <a href="/add_time">go study!</a>
     <a href="/logout">logout</a>
-    
-</body>
+    <h1>Historial</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Resumen</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for estudio in estudios %}
+        <tr>
+          <td>{{ estudio.fecha_inicio.strftime('%d-%m-%Y') }}</td>
+          <td>{{ estudio.fecha_inicio.strftime('%H:%M:%S') }}</td>
+          <td>{{ estudio.fecha_fin.strftime('%H:%M:%S') }}</td>
+          <td><a href="#" onclick="toggleResumen({{ loop.index }})">Ver</a></td>
+        </tr>
+        <!-- Nueva fila de resumen, inicialmente oculta -->
+        <tr id="resumen-row-{{ loop.index }}" style="display: none;">
+          <td colspan="4" style="text-align: left;">
+            <div>{{ estudio.resumen }}</div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <script>
+      function toggleResumen(index) {
+        const resumenRow = document.getElementById(`resumen-row-${index}`)
+        if (resumenRow.style.display === "none") {
+          resumenRow.style.display = "table-row" // Mostrar la fila
+        } else {
+          resumenRow.style.display = "none" // Ocultar la fila
+        }
+      }
+    </script>
+  </body>
 </html>
