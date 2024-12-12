@@ -8,13 +8,14 @@
       href="{{ url_for('static', filename='style.css') }}"
     />
     <script
-      src="{{ url_for('static', filename='timerAdd.js') }}"
+      src="{{ url_for('static', filename='timerUse.js') }}"
       defer
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <title>Document</title>
   </head>
   <body>
-    <h1>Study</h1>
+    <h1>Play</h1>
     <div class="wrapper">
       <div class="time">
         <span class="hour">00</span>
@@ -23,12 +24,12 @@
         <span class="colon">:</span>
         <span class="second">00</span>
       </div>
-    
+
       <div class="buttons">
         <button class="start">Start</button>
-        <button class="stop" disabled>Stop</button>
+        <button class="stop">Stop</button>
       </div>
-    </div>
-    
+      
+      <a href="/cancel">Cancel</a>
   </body>
 </html>

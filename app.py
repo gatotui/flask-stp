@@ -53,6 +53,17 @@ class Uso(db.Model):
     def __repr__(self):
         return f'<Uso {self.id} - Usuario {self.usuario.nombre}>'
     
+@app.route('/tiempo/<int:milisegundos>')
+def convertir_tiempo(milisegundos):
+    # Convertir milisegundos a segundos, minutos y horas
+    segundos = milisegundos // 1000
+    minutos, segundo = divmod(segundos, 60)
+    hora, minuto = divmod(minutos, 60)
+
+    # Formatear el tiempo
+    tiempo_formateado = f"{hora:02d}:{minuto:02d}:{segundo:02d}"
+    return jsonify({'tiempo': tiempo_formateado})
+
 @app.route("/save_data", methods=["POST"])
 def save_data():
     data = request.get_json()
@@ -62,7 +73,7 @@ def save_data():
     summary = data.get('summary')
     time = data.get('time')
     
-    print(f"resumen recibido: {summary}")
+    # print(f"resumen recibido: {summary}")
     
     usuario_id = session.get("usuario_id")
 
@@ -109,6 +120,10 @@ def cancel():
 @app.route("/add_time")
 def add_time():
     return render_template("add_time.html")
+
+@app.route("/use_time")
+def use_time():
+    return render_template("use_time.html")
     
 @app.route("/registro")
 def registro():
@@ -179,7 +194,7 @@ def home():
     return render_template("login.html")
 
 if __name__ == "__main__":
-    #with app.app_context():
-        #db.create_all()
+    # with app.app_context():
+    #     db.create_all()
     app.run(debug=True)
     
