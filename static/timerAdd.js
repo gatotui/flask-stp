@@ -71,10 +71,9 @@ function stop() {
     parseInt(sec) * 1000 +
     parseInt(ms)
 
-  // console.log("Tiempo transcurrido en milisegundos:", timeElapsedInMs)
-  // console.log("Resumen:", summary)
+  time = Math.floor(timeElapsedInMs / 100) * 100
 
-  sendData(date_inicio, date_fin, summary, timeElapsedInMs)
+  sendData(date_inicio, date_fin, summary, time)
 }
 
 function putValue() {
@@ -99,6 +98,7 @@ function sendData(date_inicio, date_fin, summary, time) {
     .then((response) => response.json())
     .then(data => {
       if (data.redirect) {
+        //me redirige al endpoint especificado en el backend (perfil)
         window.location.href = data.redirect; 
       }
     })

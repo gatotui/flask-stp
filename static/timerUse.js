@@ -1,4 +1,6 @@
-let remainingTimeMs = 12000
+let time = document.querySelector('.tiempo').textContent.trim();
+
+let remainingTimeMs = time
 let countdownTimer
 
 const hourSpan = document.querySelector(".hour")

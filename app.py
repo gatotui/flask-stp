@@ -53,17 +53,6 @@ class Uso(db.Model):
     def __repr__(self):
         return f'<Uso {self.id} - Usuario {self.usuario.nombre}>'
     
-@app.route('/tiempo/<int:milisegundos>')
-def convertir_tiempo(milisegundos):
-    # Convertir milisegundos a segundos, minutos y horas
-    segundos = milisegundos // 1000
-    minutos, segundo = divmod(segundos, 60)
-    hora, minuto = divmod(minutos, 60)
-
-    # Formatear el tiempo
-    tiempo_formateado = f"{hora:02d}:{minuto:02d}:{segundo:02d}"
-    return jsonify({'tiempo': tiempo_formateado})
-
 @app.route("/save_data", methods=["POST"])
 def save_data():
     data = request.get_json()
@@ -72,8 +61,6 @@ def save_data():
     end = data.get('end')
     summary = data.get('summary')
     time = data.get('time')
-    
-    # print(f"resumen recibido: {summary}")
     
     usuario_id = session.get("usuario_id")
 
@@ -123,7 +110,11 @@ def add_time():
 
 @app.route("/use_time")
 def use_time():
-    return render_template("use_time.html")
+    usuario_id = session.get("usuario_id")
+    tiempo = Tiempo.query.filter_by(usuario_id=usuario_id).first()
+    tiempo_valor = tiempo.tiempo if tiempo else 0
+    
+    return render_template("use_time.html", tiempo=tiempo_valor)
     
 @app.route("/registro")
 def registro():
