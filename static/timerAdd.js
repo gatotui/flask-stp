@@ -83,7 +83,7 @@ function putValue() {
 }
 
 function sendData(date_inicio, date_fin, summary, time) {
-  fetch("/save_data", {
+  fetch("/save_study", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

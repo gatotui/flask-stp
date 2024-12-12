@@ -46,15 +46,44 @@ class Estudio(db.Model):
 class Uso(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
-    fecha = db.Column(db.DateTime, nullable=False)
-    tiempo = db.Column(db.Float, default=0.0)
+    fecha_inicio = db.Column(db.DateTime, nullable=False)
+    fecha_fin = db.Column(db.DateTime, nullable=False)
     usuario = db.relationship('Usuario', backref=db.backref('usos', lazy=True))
     
     def __repr__(self):
         return f'<Uso {self.id} - Usuario {self.usuario.nombre}>'
+
+@app.route("/save_use", methods=["POST"])
+def save_time():
+    data = request.get_json()
     
-@app.route("/save_data", methods=["POST"])
-def save_data():
+    start = data.get('start')
+    end = data.get('end')
+    time = data.get('time')
+      
+    usuario_id = session.get("usuario_id")
+
+    fecha_inicio = datetime.strptime(start, "%Y-%m-%d %H:%M:%S")
+    fecha_fin = datetime.strptime(end, "%Y-%m-%d %H:%M:%S")
+
+    uso = Uso(
+        usuario_id=usuario_id,
+        fecha_inicio=fecha_inicio,
+        fecha_fin=fecha_fin,
+    )
+    db.session.add(uso)
+    
+    tiempo = Tiempo.query.filter_by(usuario_id=usuario_id).first()
+    tiempo.tiempo = time
+    print('que pasa3')
+    db.session.add(tiempo)
+
+    db.session.commit()
+    
+    return jsonify({'redirect': url_for('perfil')})
+    
+@app.route("/save_study", methods=["POST"])
+def save_study():
     data = request.get_json()
     
     start = data.get('start')
