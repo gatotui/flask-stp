@@ -3,13 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 from datetime import datetime
-import json
 from sqlalchemy import desc
+from decouple import config
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:perri007@localhost:5432/study_to_play'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['SECRET_KEY'] = config('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = config('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config('SQLALCHEMY_TRACK_MODIFICATIONS')
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
