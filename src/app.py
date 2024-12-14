@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
 from datetime import datetime
-from sqlalchemy import desc
+from sqlalchemy import desc, text
 from decouple import config
 from sqlalchemy.exc import OperationalError
 
@@ -19,7 +19,7 @@ migrate = Migrate(app, db)
 @app.route('/test_db')
 def test_db():
     try:
-        db.session.execute('SELECT 1')
+        db.session.execute(text('SELECT 1'))
         return jsonify({"status":"success", "message": "Conection to the database is successfull"}), 200
     except OperationalError as e:
         return jsonify({"status": "error", "message":"Failed to connect to the database", "details": str(e)}), 500
@@ -184,7 +184,7 @@ def registrar_usuario():
     db.session.add(nuevo_usuario)
     db.session.commit()
     
-    return redirect(url_for("mostrar_usuarios"))
+    return redirect(url_for("login"))
     
 @app.route("/usuarios")
 def mostrar_usuarios():
