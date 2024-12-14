@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from datetime import datetime
 from sqlalchemy import desc
 from decouple import config
+from sqlalchemy.exc import OperationalError
 
 app = Flask(__name__)
 
@@ -14,6 +15,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config('SQLALCHEMY_TRACK_MODIFICA
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+@app.route('test_db')
+def test_db():
+    try:
+        db.session.execute('SELECT 1')
+        return jsonify({"status":"success", "message": "Conection to the database is successfull"}), 200
+    except OperationalError as e:
+        return jsonify({"status": "error", "message":"Failed to connect to the database", "details": str(e)}), 500
 
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -221,7 +230,7 @@ def home():
     return render_template("login.html")
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
+    # with app.app_context():
+    #     db.create_all()
     app.run(debug=False)
     
