@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config('SQLALCHEMY_TRACK_MODIFICA
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-@app.route('test_db')
+@app.route('/test_db')
 def test_db():
     try:
         db.session.execute('SELECT 1')
