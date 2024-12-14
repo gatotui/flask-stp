@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Study to Play{% endblock %}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<style>
+body {
+    background-color: #8ec8c8;
+  }
+.custom-btn {
+    background-color: #fb7833;
+    color: #fff;
+}
+.custom-btn-2 {
+    background-color: #fbc93e;
+    color: #fff;
+}
+.custom-btn-3 {
+    background-color: #b3b3b3;
+    color: #fff;
+}
+a {
+    color: #aaa;
+}
+.custom-bg-1 {
+    background-color: #eee;
+}
+.custom-text-1 {
+    color: #666;
+}
+input::placeholder {
+    color: #fff; 
+    font-style: italic;
+}
+input:focus::placeholder {
+    color: #ddd;
+}
+.custom-fs-1 {
+  font-size: 3rem;
+}
+.custom-textarea {
+height: 150px;
+}
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 375px) {
+  .table th, .table td {
+    font-size: 0.85rem;
+  }
+}
+
+</style>
+</head>
+<body class="d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="d-flex justify-content-center mt-3">
+            {% if request.path == '/login' or request.path == '/registro' or request.path == '/' or request.path == '/perfil' %}
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="logo study to play" style="max-width: 100%; height: auto;">
+            {% endif %}
+
+            {% if request.path == '/add_time'%}
+            <img src="{{ url_for('static', filename='logo_study.png') }}" alt="logo study to play" style="max-width: 100%; height: auto;">
+            {% endif %}
+
+            {% if request.path == '/use_time'%}
+            <img src="{{ url_for('static', filename='logo_play.png') }}" alt="logo study to play" style="max-width: 100%; height: auto;">
+            {% endif %}
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="custom-bg-1 text-white fixed-bottom">
+        <div class="container d-flex justify-content-center py-3">
+            <a href="/perfil" class="text-white mx-3"><iconify-icon icon="mdi:folder-home" style="color: {{ '#fbc93e' if request.path == '/perfil' else '#b3b3b3' }}; font-size: 30px" ></iconify-icon></a>
+            <a href="/add_time" class="text-white mx-3"><iconify-icon icon="mdi:account-school" style="color: {{ '#fbc93e' if request.path == '/add_time' else '#b3b3b3' }}; font-size: 30px" ></iconify-icon></a>
+            <a href="/use_time" class="text-white mx-3"><iconify-icon icon="mdi:play-circle" style="color: {{ '#fbc93e' if request.path == '/use_time' else '#b3b3b3' }}; font-size: 30px" ></iconify-icon></a>
+            <a href="/logout" class="text-white mx-3"><iconify-icon icon="mdi:location-exit" style="color: {{ '#b3b3b3' if session.get("usuario_nombre") == None else '#fa7266' }}; font-size: 30px" ></iconify-icon></a>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.2.0/dist/iconify-icon.min.js"></script>
+</body>
+</html>
+

@@ -1,39 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-    <script
-      src="{{ url_for('static', filename='timerAdd.js') }}"
-      defer
-    ></script>
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>Study</h1>
-    <div class="wrapper">
-      <div class="time">
-        <span class="hour">00</span>
-        <span class="colon">:</span>
-        <span class="minute">00</span>
-        <span class="colon">:</span>
-        <span class="second">00</span>
-      </div>
-    
-      <div class="buttons">
-        <button class="start">Start</button>
-        <textarea name="summary" id="summary" placeholder="Summary of what I studied"></textarea>
-        <br>
-        <a href="/cancel">Cancel</a>
-        <button class="stop">Submit</button>
-        </form>
-        </div>
-      </div>
-    </div>
-    
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-center custom-fs-1">
+  <div class="text-white">
+    <span class="hour">00</span>
+    <span class="colon">:</span>
+    <span class="minute">00</span>
+    <span class="colon">:</span>
+    <span class="second">00</span>
+  </div>
+</div>
+
+<div class="d-flex flex-column align-items-center">
+  <button class="start btn custom-btn mb-3">Start</button>
+  <textarea class="form-control mb-3 custom-textarea" name="summary" id="summary" placeholder="Summary of what I studied"></textarea>
+  <div class="d-flex gap-4">
+    <div><a class="btn custom-btn-3" href="/cancel">Cancel</a></div>
+    <div><button class="stop btn custom-btn-2">Submit</button></div>
+  </div>
+  </form>
+</div>
+
+<script src="{{ url_for('static', filename='timerAdd.js') }}"></script>
+
+{% endblock %}

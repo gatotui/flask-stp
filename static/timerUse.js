@@ -92,7 +92,7 @@ function getDate() {
 
 function sendData(date_inicio, date_fin, remainingTimeMs) {
   // console.log('enviando informacion al backend')
-  console.log(remainingTimeMs)
+  // console.log(remainingTimeMs)
   fetch("/save_use", {
     method: "POST",
     headers: {

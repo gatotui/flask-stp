@@ -1,66 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil</title>
-    <style>
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th,
-      td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-      }
-      th {
-        background-color: #f4f4f4;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Bienvenido, {{ nombre }}!</h1>
-    <a href="/add_time">go study!</a>
-    <a href="/use_time">go play!</a>
-    <a href="/logout">logout</a>
-    <h2>Historial</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Inicio</th>
-          <th>Fin</th>
-          <th>Resumen</th>
+{% extends 'base.html' %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+
+<div class="custom-bg-1 custom-text-1 p-4 rounded-4 mb-5">
+  <p class="mb-4 text-center">Welcome, {{ nombre }}!</p>
+  <h2 class="mb-4 text-center">Here's your study record</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped text-center">
+      <thead class="custom-bg-1">
+        <tr class="custom-text-1">
+          <th>Date</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Summary</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="fs-6">
         {% for estudio in estudios %}
         <tr>
           <td>{{ estudio.fecha_inicio.strftime('%d-%m-%Y') }}</td>
           <td>{{ estudio.fecha_inicio.strftime('%H:%M:%S') }}</td>
           <td>{{ estudio.fecha_fin.strftime('%H:%M:%S') }}</td>
-          <td><a href="#" onclick="toggleResumen({{ loop.index }})">Ver</a></td>
+          <td><a href="#" class="text-decoration-none" onclick="toggleResumen( {{ loop.index }} )">View</a></td>
         </tr>
-        <!-- Nueva fila de resumen, inicialmente oculta -->
         <tr id="resumen-row-{{ loop.index }}" style="display: none;">
-          <td colspan="4" style="text-align: left;">
-            <div>{{ estudio.resumen }}</div>
+          <td colspan="4" class="p-3">
+            <div class="custom-bg-1 p-2 rounded-3">{{ estudio.resumen }}</div>
           </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    <script>
-      function toggleResumen(index) {
-        const resumenRow = document.getElementById(`resumen-row-${index}`)
-        if (resumenRow.style.display === "none") {
-          resumenRow.style.display = "table-row" // Mostrar la fila
-        } else {
-          resumenRow.style.display = "none" // Ocultar la fila
-        }
-      }
-    </script>
-  </body>
-</html>
+  </div>
+</div>
+<br><br>
+
+<script>
+  function toggleResumen(index) {
+    const resumenRow = document.getElementById(`resumen-row-${index}`)
+    if (resumenRow.style.display === "none") {
+      resumenRow.style.display = "table-row"
+    } else {
+      resumenRow.style.display = "none"
+    }
+  }
+</script>
+
+{% endblock %}

@@ -54,7 +54,7 @@ class Uso(db.Model):
         return f'<Uso {self.id} - Usuario {self.usuario.nombre}>'
 
 @app.route("/save_use", methods=["POST"])
-def save_time():
+def save_use():
     data = request.get_json()
     
     start = data.get('start')
@@ -135,10 +135,16 @@ def cancel():
 
 @app.route("/add_time")
 def add_time():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    
     return render_template("add_time.html")
 
 @app.route("/use_time")
 def use_time():
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+    
     usuario_id = session.get("usuario_id")
     tiempo = Tiempo.query.filter_by(usuario_id=usuario_id).first()
     tiempo_valor = tiempo.tiempo if tiempo else 0
@@ -214,7 +220,7 @@ def home():
     return render_template("login.html")
 
 if __name__ == "__main__":
-    # with app.app_context():
-    #     db.create_all()
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
     
