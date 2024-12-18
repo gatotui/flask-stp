@@ -6,6 +6,7 @@ from datetime import datetime
 from sqlalchemy import desc, text
 from decouple import config
 from sqlalchemy.exc import OperationalError
+import os
 
 app = Flask(__name__)
 
@@ -232,5 +233,5 @@ def home():
 if __name__ == "__main__":
 #    with app.app_context():
 #        db.create_all()
-    app.run(debug=False)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
     
