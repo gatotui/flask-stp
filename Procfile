@@ -1,1 +1,1 @@
-web: flask init-db && gunicorn app:'create_app()'
+web: gunicorn src.app:app --bind 0.0.0.0:$PORT
